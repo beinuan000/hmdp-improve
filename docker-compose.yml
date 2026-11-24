@@ -1,0 +1,50 @@
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: hmdp-mysql
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "HmdpRoot123"
+      MYSQL_DATABASE: hmdp
+      MYSQL_USER: hmdp
+      MYSQL_PASSWORD: "Hmdp123"
+      TZ: Asia/Shanghai
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  redis:
+    image: redis:7.2
+    container_name: hmdp-redis
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6380:6379"
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
+      - --requirepass
+      - "Redis123"
+    volumes:
+      - redis-data:/data
+
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: hmdp-rabbitmq
+    hostname: hmdp-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5673:5672"
+      - "127.0.0.1:15673:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: hmdp
+      RABBITMQ_DEFAULT_PASS: "Rabbit123"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
+volumes:
+  mysql-data:
+  redis-data:
+  rabbitmq-data:
