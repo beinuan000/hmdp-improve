@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hmdp.dto.LoginFormDTO;
 import com.hmdp.dto.Result;
@@ -164,6 +165,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             num >>>= 1;
         }
         return Result.ok(count);
+    }
+
+    @Override
+    public Result logout(String token) {
+        // 1. 校验token
+        if (StrUtil.isBlank(token)) {
+            return Result.fail("用户未登录");
+        }
+
+        // 2. 拼接Redis中的key
+        String key = LOGIN_USER_KEY + token;
+
+        // 3. 删除Redis中的用户登录信息
+        stringRedisTemplate.delete(key);
+
+        // 4. 返回成功
+        return Result.ok();
     }
 
     private User createUserWithPhone(String phone) {

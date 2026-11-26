@@ -33,9 +33,12 @@ spring:
         acknowledge-mode: manual
         prefetch: 10
 
-  mybatis-plus:
-    type-aliases-package: com.hmdp.entity
+  jackson:
+    default-property-inclusion: non_null
 
-  logging:
-    level:
-      com.hmdp: debug
+mybatis-plus:
+  type-aliases-package: com.hmdp.entity
+
+logging:
+  level:
+    com.hmdp: debug
